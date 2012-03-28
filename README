@@ -1,0 +1,40 @@
+Concur Syntax Converter
+
+Written in Haskell. Requires the "indents" package.
+Takes input in "Concur" syntax from stdin, outputs LISP syntax to stdout. 
+
+Visual summary of syntax:
+
+f(a b, c, d e) -> (f (a b) (c) (d e))
+
+o.x.y -> (y (x (o)))
+
+f a b
+  c
+    g	     -> (f (a b) (c (g)) (d e))
+  d e
+
+(x) -> x    #performed after all other phases
+
+#line comments are like this
+/* block comments
+are like this */
+
+All valid Scheme programs are also valid under Concur syntax, because if a line has uncompleted parens, it logically continues to the next line. A difference from scheme is that all top-level definitions are put into one big list under this syntax. Just remove the outermost pair of parens, and you should have valid scheme programs. 
+
+[TODO: Add this as an option, in addition, interpret leading "quote" characters as the identifier "quote" with a command-line option. Under Concur syntax it is viewed as a function]
+
+Concur syntax vs. Scheme syntax:
+Concur:
+define fact n
+   if = n 0
+      1
+      * n fact(- n 1)
+
+Scheme:
+(define (fact n) 
+    (if (= n 0)
+        1
+        (* n (fact (- n 1)))
+    )
+)
